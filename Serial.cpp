@@ -90,9 +90,7 @@ char Serial::Read()
     {
         try
         {
-            int ch = _serialPort->ReadChar();
-            //Console::WriteLine(ch);
-            return (char)ch;
+            return _serialPort->ReadByte();
         }
         catch (TimeoutException^) {}
     }

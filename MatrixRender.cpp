@@ -55,7 +55,7 @@ bool MatrixRender::SendFrame(Frame *frm)
     //std::this_thread::sleep_for(std::chrono::milliseconds(9));
     if (InterfacePort.Read() == '#') {
         cout << "Handshake recibido!" << endl;
-        cout << "Size: " << sizeof(buffer) << endl;
+        cout << "Size: " << sizeof(*buffer) << endl;
         _FrameToSerial(frm);
         InterfacePort.Write(buffer, 1024);
         while (InterfacePort.Available() < 4);

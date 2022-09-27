@@ -6,8 +6,8 @@
 #include <chrono>
 #include <thread>
 #include "ConRender.h"
+#include "MatrixRender.h"
 #include "Frame.h"
-#include "Serial.hpp"
 
 using System::Console;
 using namespace std;
@@ -329,20 +329,10 @@ int PrintMenu() {
 
 int main()
 {
-    // Crea una instancia de la clase Serial
-    Serial a;
-
     cout << "Conectando con el Hardware . . ." << endl;
-    // Establece los parámetros de la comunicación
-    a.SetPortName("COM4");
-    a.SetPortBaudRate(115200);
-    a.SetPortParity(Parity::None);
-    a.SetPortDataBits(8);
-    a.SetPortStopBits(StopBits::One);
-    a.SetPortHandshake(Handshake::None);
-
-    //Abre el puerto
-    if (!a.OpenPort()) {
+    MatrixRender matrix("COM4");
+    
+    if (!matrix.Inicializar()) {
         cout << "Error al conectar con el hardware" << endl;
         cout << "Saliendo . . ." << endl;
         system("pause");
@@ -352,55 +342,23 @@ int main()
     cout << endl << "Conectado!" << endl;
     Delay(700);
 
+    // Objetos para visualizar imagen en consola y framebuffer
     ConRender render;
     Frame frm(16,16);
 
     int r, g, b;
     double y;
-    unsigned char buf_response[100];
+    
     render.ShowFrame(&frm);
+    matrix.SendFrame(&frm);
 
     char opt = 0;
-    while ((opt = PrintMenu()) != 0x34)
+    while ((opt = PrintMenu()) != 0x35)
     {
         switch (opt)
         {
         case 0x31:
             DrawMario(&frm);
-            a.Write((unsigned char *)"!",1);
-            //std::this_thread::sleep_for(std::chrono::milliseconds(9));
-            if (a.Read() == '#') {
-                cout << "Handshake recibido!" << endl;
-                cout << "Size: " << sizeof(buffer) << endl;
-                FrameToSerial(&frm);
-                a.Write(buffer,1024);
-                while (a.Available() < 4);
-                a.ReadChars(buf_response, 4);
-                if ( buf_response[0] == '$' && 
-                     buf_response[1] == '=' &&
-                     buf_response[2] == '$')
-                {
-                    cout << "Verificando Checksum . . ." << endl;
-                    if (buf_response[3] == checksum)
-                    {
-                        cout << "Checksum OK" << endl;
-                        a.Write((unsigned char*)"!", 1);
-                    }
-                    else
-                    {
-                        cout << "Checksum BAD " << (int)buf_response[3] << ", " << (int)checksum << endl;
-                        a.Write((unsigned char*)"-", 1);
-                    }
-                }
-                else
-                {
-                    cout << "Info NO OK" << endl;
-                }
-            }
-            else
-            {
-                cout << "No recibi Handshake!";
-            }
             system("pause");
             break;
         case 0x32:
@@ -414,13 +372,12 @@ int main()
             cout << "Ingrese el valor para el brillo(0.0-1.0: ";
             cin >> y;
             frm.SetGlobalBrigthness(y);
-            FrameToSerial(&frm);
-            cout << buffer;
             system("pause");
-            //a.Write(FrameToSerial(&frm));
             break;
         case 0x33:
             frm.ClearFrame();
+            break;
+        case 0x34:
             break;
         default:
             cout << endl << "Opci\xA2n no valida" << endl;
@@ -431,5 +388,6 @@ int main()
         cin.clear();
         system("cls");
         render.ShowFrame(&frm);
+        matrix.SendFrame(&frm);
     }
 }
