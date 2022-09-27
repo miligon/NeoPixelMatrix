@@ -18,6 +18,7 @@ void ConRender::_SetRGB(int r, int g, int b)
 void ConRender::ShowFrame(Frame* frm) {
 	
 	cout << endl;
+	frm->FlipHorizontal();
 	for (int i = 0; i < frm->GetRows(); i++) {
 		for (int k = 0; k < frm->GetCols(); k++) {
 			int r, g, b;
@@ -29,5 +30,6 @@ void ConRender::ShowFrame(Frame* frm) {
 		}
 		cout << endl;
 	}
+	frm->FlipHorizontal();
 	Console::ResetColor();
 }

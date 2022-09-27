@@ -30,6 +30,25 @@ Frame::~Frame() {
 int Frame::GetRows() { return _filas; }
 int Frame::GetCols() { return _columnas; }
 
+void Frame::EstablecerTamaño(int filas, int columnas) {
+
+		// Elimina la matriz inicializada en el constructor
+	for (int i = 0; i < _filas; ++i) {
+		delete[] _frame[i];
+	}
+	delete[] _frame;
+
+	_filas = filas;
+	_columnas = columnas;
+	
+	// Inicializa un array de n filas de tipo Pixel
+	_frame = new Pixel * [_filas];
+	// Cada fila se inicializa como un array de n columnas de tipo Pixel
+	for (int i = 0; i < _filas; ++i) {
+		_frame[i] = new Pixel[_columnas];
+	}
+}
+
 Pixel& Frame::pixel(int fila, int columna){
 	return _frame[fila][columna];
 }
@@ -55,6 +74,36 @@ void Frame::SetGlobalBrigthness(double x) {
 	for (int i = 0; i < _filas; i++) {
 		for (int j = 0; j < _columnas; j++) {
 			this->pixel(i, j).SetBrillo(x);
+		}
+	}
+}
+
+void Frame::FlipHorizontal() {
+	Frame buffer(_columnas, _filas);
+	for (int i = 0; i < _filas; i++) {
+		for (int j = 0; j < _columnas; j++) {
+			buffer.pixel(i, 15 - j) = this->pixel(i, j);
+		}
+	}
+
+	for (int i = 0; i < _filas; i++) {
+		for (int j = 0; j < _columnas; j++) {
+			this->pixel(i, j) = buffer.pixel(i, j);
+		}
+	}
+}
+
+void Frame::FlipVertical() {
+	Frame buffer(_columnas, _filas);
+	for (int i = 0; i < _filas; i++) {
+		for (int j = 0; j < _columnas; j++) {
+			buffer.pixel(15-i, j) = this->pixel(i, j);
+		}
+	}
+
+	for (int i = 0; i < _filas; i++) {
+		for (int j = 0; j < _columnas; j++) {
+			this->pixel(i, j) = buffer.pixel(i, j);
 		}
 	}
 }
