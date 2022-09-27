@@ -4,8 +4,9 @@
 
 ref class MatrixRender{
 private:
-	int _filas;
-	int _columnas;
+	unsigned char *buffer;
+	unsigned char *buf_response;
+	unsigned char checksum = 0;
 	Serial InterfacePort;
 	//Frame* _display;
 	void _SetRGB(int r, int g, int b);
@@ -13,6 +14,7 @@ private:
 public:
 	MatrixRender(String^ port);
 	bool Inicializar();
-	void ShowFrame(Frame* frm);
+	void _FrameToSerial(Frame *frm);
+	bool SendFrame(Frame *frm);
 };
 
