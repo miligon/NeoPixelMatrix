@@ -10,11 +10,11 @@ private:
 	Serial InterfacePort;
 	//Frame* _display;
 	void _SetRGB(int r, int g, int b);
+	void _FrameToSerial(Frame *frm);
 
 public:
 	MatrixRender(String^ port);
 	bool Inicializar();
-	void _FrameToSerial(Frame *frm);
 	bool SendFrame(Frame *frm);
 };
 
