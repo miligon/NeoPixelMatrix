@@ -1,0 +1,6 @@
+NeoPixelMatrix
+
+Codigo para control 1 matriz de 16x16 de LEDs WS2812B tipo NeoPixel desde la PC.
+
+Para el control de la matriz se usa un micrcontrolador ARM Cortex-M4, en específico el STM32F446RE 
+montado en una tarjeta NUCLEO que se comunica a traves de USB CDC con la PC
