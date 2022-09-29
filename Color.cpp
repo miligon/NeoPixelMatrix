@@ -20,25 +20,25 @@ void Color::GetRGB(int *r, int *g, int *b){
 }
 
 void Color::SetRGB(int r, int g, int b){
-	_red = r;
-	_green = g;
-	_blue = b;
+	_red = (r > 254) ? 254 : r;
+	_green = (g > 254) ? 254 : g;
+	_blue = (b > 254) ? 254 : b;
 }
 
 void Color::SetRed(int x){
-	_red = x;
+	_red = (x > 254) ? 254 : x;
 }
 int Color::GetRed(){
 	return _red;
 }
 void Color::SetGreen(int x){
-	_green = x;
+	_green = (x > 254) ? 254 : x;
 }
 int Color::GetGreen(){
 	return _green;
 }
 void Color::SetBlue(int x){
-	_blue = x;
+	_blue = (x > 254) ? 254 : x;
 }
 int Color::GetBlue(){
 	return _blue;

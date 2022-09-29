@@ -45,11 +45,11 @@ void Pixel::_NormalizarLuminosidad(int sR, int sG, int sB) {
 
 }
 void Pixel::GetRGB(int* r, int* g, int* b) {
-	*r = _sRGBtoLin(Color::_red / 255.0 * _brillo) * 255.0;
-	*g = _sRGBtoLin(Color::_red / 255.0 * _brillo) * 255.0;
-	*b = _sRGBtoLin(Color::_blue / 255.0 * _brillo) * 255.0;
+	*r = Color::_red * _brillo;
+	*g = Color::_green * _brillo;
+	*b = Color::_blue * _brillo;
 }
 
-int Pixel::GetRed() { return _sRGBtoLin(Color::_red / 255.0 * _brillo) * 255.0; };
-int Pixel::GetGreen() { return _sRGBtoLin(Color::_red / 255.0 * _brillo) * 255.0; };
-int Pixel::GetBlue() { return _sRGBtoLin(Color::_blue / 255.0 * _brillo) * 255.0; };
+int Pixel::GetRed() { return (int)_sRGBtoLin(Color::_red / 255.0 * _brillo) * 255.0; };
+int Pixel::GetGreen() { return (int)_sRGBtoLin(Color::_green / 255.0 * _brillo) * 255.0; };
+int Pixel::GetBlue() { return (int)_sRGBtoLin(Color::_blue / 255.0 * _brillo) * 255.0; };

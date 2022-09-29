@@ -38,6 +38,53 @@ int PrintMenu() {
     return opt;
 }
 
+//Envia una secuencia de frames al microcontrolador
+void animacion(Frame* frm, MatrixRender^ matrix, ConRender *render) {
+    system("cls");
+    DrawMario(frm, 0.00);
+    render->ShowFrame(frm);
+    matrix->SendFrame(frm);
+    for (double brillo = 0.0; brillo <= 0.60; brillo += 0.2) {
+        Delay(30);
+        system("cls");
+        frm->SetGlobalBrigthness(brillo);
+        render->ShowFrame(frm);
+        matrix->SendFrame(frm);
+    }
+    Delay(60);
+    system("cls");
+    DrawMario1(frm, 0.60);
+    render->ShowFrame(frm);
+    matrix->SendFrame(frm);
+    Delay(60);
+    system("cls");
+    DrawMario2(frm, 0.60);
+    render->ShowFrame(frm);
+    matrix->SendFrame(frm);
+    Delay(60);
+    system("cls");
+    DrawMario1(frm, 0.60);
+    render->ShowFrame(frm);
+    matrix->SendFrame(frm);
+    Delay(60);
+    system("cls");
+    DrawMario2(frm, 0.60);
+    render->ShowFrame(frm);
+    matrix->SendFrame(frm);
+    Delay(60);
+    system("cls");
+    DrawMario(frm, 0.60);
+    render->ShowFrame(frm);
+    matrix->SendFrame(frm);
+    for (double brillo = 0.60; brillo >= 0.00; brillo -= 0.2) {
+        Delay(30);
+        system("cls");
+        frm->SetGlobalBrigthness(brillo);
+        render->ShowFrame(frm);
+        matrix->SendFrame(frm);
+    }
+}
+
 int main()
 {
     // Objetos para visualizar imagen en consola y framebuffer
@@ -71,7 +118,7 @@ int main()
         switch (opt)
         {
         case 0x31:
-            DrawMario2(&frm, 0.4);
+            DrawMario1(&frm, 0.8);
             break;
         case 0x32:
             cout << "Ingrese el valor para rojo (0-255): ";
@@ -92,6 +139,7 @@ int main()
             cout << "Ingrese el valor para el brillo(0.0-1.0): ";
             cin >> y;
             frm.SetGlobalBrigthness(y);
+            matrix.SendFrameBrillo(y);
             break;
         case 0x35:
             frm.FlipHorizontal();
@@ -100,36 +148,7 @@ int main()
             frm.FlipVertical();
             break;
         case 0x37:
-            system("cls");
-            DrawMario(&frm, 0.40);
-            render.ShowFrame(&frm);
-            matrix.SendFrame(&frm);
-            Delay(60);
-            system("cls");
-            DrawMario1(&frm, 0.40);
-            render.ShowFrame(&frm);
-            matrix.SendFrame(&frm);
-            Delay(60);
-            system("cls");
-            DrawMario2(&frm, 0.40);
-            render.ShowFrame(&frm);
-            matrix.SendFrame(&frm);
-            Delay(60);
-            system("cls");
-            DrawMario1(&frm, 0.40);
-            render.ShowFrame(&frm);
-            matrix.SendFrame(&frm);
-            Delay(60);
-            system("cls");
-            DrawMario2(&frm, 0.40);
-            render.ShowFrame(&frm);
-            matrix.SendFrame(&frm);
-            Delay(60);
-            system("cls");
-            DrawMario(&frm, 0.40);
-            render.ShowFrame(&frm);
-            matrix.SendFrame(&frm);
-            Delay(60);
+            animacion(&frm, %matrix, &render);
             break;
         default:
             cout << endl << "Opci\xA2n no valida" << endl;

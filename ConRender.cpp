@@ -17,11 +17,13 @@ void ConRender::_SetRGB(int r, int g, int b)
 
 void ConRender::ShowFrame(Frame* frm) {
 	
+	//double brillo_anterior = 0.0;
 	cout << endl;
 	frm->FlipHorizontal();
 	for (int i = 0; i < frm->GetRows(); i++) {
 		for (int k = 0; k < frm->GetCols(); k++) {
 			int r, g, b;
+			//brillo_anterior = frm->pixel(i, k).GetBrillo();
 			frm->pixel(i, k).GetRGB(&r, &g, &b);
 			_SetRGB(r, g, b);
 			//cout << "\xDB";

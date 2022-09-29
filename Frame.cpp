@@ -32,7 +32,7 @@ int Frame::GetCols() { return _columnas; }
 
 void Frame::EstablecerTamaño(int filas, int columnas) {
 
-		// Elimina la matriz inicializada en el constructor
+	// Elimina la matriz inicializada en el constructor
 	for (int i = 0; i < _filas; ++i) {
 		delete[] _frame[i];
 	}

@@ -39,7 +39,7 @@ void MatrixRender::_FrameToSerial(Frame *frm) {
     for (int i = 0; i < frm->GetRows(); i++) {
         for (int j = 0; j < frm->GetCols(); j++) {
             frm->pixel(i, j).GetRGB(&r, &g, &b);
-            y = (int)((frm->pixel(i, j).GetBrillo()) * 100.0);
+            y = (int)((frm->pixel(i, j).GetBrillo()/2.0) * 100.0);
             buffer[(((i * 16) + j) * 4) + 0] = (unsigned char)r;
             buffer[(((i * 16) + j) * 4) + 1] = (unsigned char)g;
             buffer[(((i * 16) + j) * 4) + 2] = (unsigned char)b;
@@ -49,44 +49,67 @@ void MatrixRender::_FrameToSerial(Frame *frm) {
     }
 }
 
+bool MatrixRender::SendFrameBrillo(double x)
+{
+    int intentos = 0;
+    unsigned char brillo[3] = { '|', (unsigned char)(x * 100.0), '$' };
+    while (intentos < 3) {
+        InterfacePort.Write(brillo, 3);
+        InterfacePort.ReadChars(buf_response, 1);
+        if (buf_response[0] == '#') {
+            return true;
+        }
+        else
+        {
+            cout << "No recibi Handshake! / Error";
+            intentos++;
+        }
+    }
+    return false;
+}
+
 bool MatrixRender::SendFrame(Frame *frm)
 {
-    InterfacePort.Write((unsigned char*)"!", 1);
-    //std::this_thread::sleep_for(std::chrono::milliseconds(9));
-    if (InterfacePort.Read() == '#') {
-        cout << "Handshake recibido!" << endl;
-        cout << "Size: " << sizeof(*buffer) << endl;
-        _FrameToSerial(frm);
-        InterfacePort.Write(buffer, 1024);
-        while (InterfacePort.Available() < 4);
-        InterfacePort.ReadChars(buf_response, 4);
-        if (buf_response[0] == '$' &&
-            buf_response[1] == '=' &&
-            buf_response[2] == '$')
-        {
-            cout << "Verificando Checksum . . ." << endl;
-            if (buf_response[3] == checksum)
+    int intentos = 0;
+    while (intentos < 3) {
+        InterfacePort.Write((unsigned char*)"!", 1);
+        //std::this_thread::sleep_for(std::chrono::milliseconds(9));
+        if (InterfacePort.Read() == '#') {
+            //cout << "Handshake recibido!" << endl;
+            //cout << "Size: " << sizeof(*buffer) << endl;
+            _FrameToSerial(frm);
+            InterfacePort.Write(buffer, 1024);
+            while (InterfacePort.Available() < 4);
+            InterfacePort.ReadChars(buf_response, 4);
+            if (buf_response[0] == '$' &&
+                buf_response[1] == '=' &&
+                buf_response[2] == '$')
             {
-                cout << "Checksum OK" << endl;
-                InterfacePort.Write((unsigned char*)"!", 1);
-                return true;
+                //cout << "Verificando Checksum . . ." << endl;
+                if (buf_response[3] == checksum)
+                {
+                    //cout << "Checksum OK" << endl;
+                    InterfacePort.Write((unsigned char*)"%", 1);
+                    return true;
+                }
+                else
+                {
+                    cout << "Checksum BAD " << (int)buf_response[3] << ", " << (int)checksum << endl;
+                    InterfacePort.Write((unsigned char*)"-", 1);
+                    return false;
+                }
             }
             else
             {
-                cout << "Checksum BAD " << (int)buf_response[3] << ", " << (int)checksum << endl;
-                InterfacePort.Write((unsigned char*)"-", 1);
+                cout << "Info NO OK" << endl;
                 return false;
             }
         }
         else
         {
-            cout << "Info NO OK" << endl;
-            return false;
+            cout << "No recibi Handshake!";
+            intentos++;
         }
     }
-    else
-    {
-        cout << "No recibi Handshake!";
-        return false;
-    }
+    return false;
 }
