@@ -12,12 +12,24 @@ Pixel::Pixel(double brillo) {
 	_brillo = brillo;
 }
 
+Pixel::Pixel(Color color, double brillo) {
+	_brillo = brillo;
+	Color::SetRed(color.GetRed());
+	Color::SetGreen(color.GetGreen());
+	Color::SetBlue(color.GetBlue());
+}
+
 void Pixel::SetBrillo(double valor){
 	_brillo = (valor <= 1.0) ? valor : 1.0;
 	_brillo = (_brillo >= 0.0) ? _brillo : 0.0;
 }
 double Pixel::GetBrillo(){
 	return _brillo;
+}
+
+Color Pixel::GetColor() {
+	Color buf(Color::_red, Color::_green, Color::_blue);
+	return buf;
 }
 double Pixel::_sRGBtoLin(double colorChannel)
 {
@@ -53,3 +65,15 @@ void Pixel::GetRGB(int* r, int* g, int* b) {
 int Pixel::GetRed() { return (int)_sRGBtoLin(Color::_red / 255.0 * _brillo) * 255.0; };
 int Pixel::GetGreen() { return (int)_sRGBtoLin(Color::_green / 255.0 * _brillo) * 255.0; };
 int Pixel::GetBlue() { return (int)_sRGBtoLin(Color::_blue / 255.0 * _brillo) * 255.0; };
+
+Pixel Pixel::operator +(Pixel pixel_operando) {
+	double brillo = (this->GetBrillo() + pixel_operando.GetBrillo()) / 2.0;
+	Pixel res(this->GetColor() + pixel_operando.GetColor(), brillo);
+	return res;
+}
+
+Pixel Pixel::operator -(Pixel pixel_operando) {
+	double brillo = (this->GetBrillo() + pixel_operando.GetBrillo()) / 2.0;
+	Pixel res(this->GetColor() - pixel_operando.GetColor(), brillo);
+	return res;
+}

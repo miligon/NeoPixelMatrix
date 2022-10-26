@@ -17,13 +17,19 @@ private:
 	double _sRGBtoLin(double colorChannel);
 public:
 	Pixel(double brillo = 1.0);
+	Pixel(Color color, double brillo = 1.0);
 
 	void SetBrillo(double valor);
 	double GetBrillo();
 	void GetRGB(int* r, int* g, int* b);
+	
+	Color GetColor();
 	int GetRed();
 	int GetGreen();
 	int GetBlue();
+
+	Pixel operator +(Pixel pixel_operando);
+	Pixel operator -(Pixel pixel_operando);
 
 };
 

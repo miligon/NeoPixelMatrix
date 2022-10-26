@@ -7,6 +7,7 @@
 
 #include "Color.h"
 
+
 Color::Color(int r, int g, int b) {
 	_red = r;
 	_green = g;
@@ -45,8 +46,15 @@ int Color::GetBlue(){
 }
 
 Color Color::operator +(Color color_operando){
-	int rojo = (int)(this->_red + color_operando.GetRed());
-	int verde = (int)(this->_green + color_operando.GetGreen());
-	int azul = (int)(this->_blue + color_operando.GetBlue());
+	int rojo = (int)(this->_red + color_operando._red);
+	int verde = (int)(this->_green + color_operando._green);
+	int azul = (int)(this->_blue + color_operando._blue);
+	return Color(rojo, verde, azul);
+}
+
+Color Color::operator -(Color color_operando) {
+	int rojo = (int)(this->_red - color_operando._red);
+	int verde = (int)(this->_green - color_operando._green);
+	int azul = (int)(this->_blue - color_operando._blue);
 	return Color(rojo, verde, azul);
 }

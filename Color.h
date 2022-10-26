@@ -8,6 +8,11 @@
 #ifndef INC_COLOR_H_
 #define INC_COLOR_H_
 
+#define ROJO 255,0,0
+#define VERDE 0,255,0
+#define AZUL 0,0,255
+#define BLANCO 255,255,255
+
 class Color {
 protected:
 	int _red;
@@ -27,6 +32,7 @@ public:
 	int GetBlue();
 
 	Color operator +(Color color_operando);
+	Color operator -(Color color_operando);
 };
 
 #endif /* INC_COLOR_H_ */

@@ -53,6 +53,18 @@ Pixel& Frame::pixel(int fila, int columna){
 	return _frame[fila][columna];
 }
 
+void Frame::SetColorFrame(Color newColor) {
+	int r, g, b;
+	r = newColor.GetRed();
+	g = newColor.GetGreen();
+	b = newColor.GetBlue();
+	for (int i = 0; i < _filas; i++) {
+		for (int j = 0; j < _columnas; j++) {
+			this->pixel(i, j).SetRGB(r, g, b);
+		}
+	}
+}
+
 void Frame::SetColorFrame(int r, int g, int b) {
 	for (int i = 0; i < _filas; i++) {
 		for (int j = 0; j < _columnas; j++) {
@@ -118,4 +130,16 @@ void Frame::DrawRectangulo(int x0, int y0, int x1, int y1){
 
 void Frame::LoadImg(const char* path) {
 
+}
+
+Frame Frame::operator +(Frame frame_operando) {
+	Frame buf(16,16);
+	//Pixel resultado;
+	//for (int i = 0; i < this->GetRows(); i++) {
+	//	for (int j = 0; j < this->GetCols(); j++) {
+			//resultado = this->pixel(i, j) + frame_operando.pixel(i, j);
+			//buf.pixel(i, j) = resultado;
+		//}
+	//}
+	return buf;
 }

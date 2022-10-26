@@ -30,7 +30,9 @@ int PrintMenu() {
         << "\t5) Voltear Horizontalmente" << endl
         << "\t6) Voltear Verticalmente" << endl
         << "\t7) Mostrar animaci\xA2n" << endl
-        << "\t8) Salir" << endl
+        << "\t8) Sumar ROJO y VERDE" << endl
+        << "\t9) Restar ROJO a BLANCO" << endl
+        << "\tA) Salir" << endl
         << endl;
         cout << "Ingrese el n\xA3mero de la opci\xA2n deseada y presione enter: ";
         opt = _getch();
@@ -89,7 +91,12 @@ int main()
 {
     // Objetos para visualizar imagen en consola y framebuffer
     ConRender render;
-    Frame frm(16,16);
+    Color colorRojo(ROJO);
+    Color colorVerde(VERDE);
+    Color colorBlanco(BLANCO);
+    Color colorResultado;
+
+    Frame frm(16, 16), frm1(16, 16), frm2(16, 16);
     frm.ClearFrame();
 
     int r, g, b;
@@ -113,7 +120,7 @@ int main()
     Delay(700);
 
     char opt = 0;
-    while ((opt = PrintMenu()) != 0x38)
+    while ((opt = PrintMenu()) != 'A')
     {
         switch (opt)
         {
@@ -149,6 +156,20 @@ int main()
             break;
         case 0x37:
             animacion(&frm, %matrix, &render);
+            break;
+        case 0x38:
+            colorResultado = colorRojo + colorVerde;
+            frm.SetColorFrame(colorResultado);
+            render.ShowFrame(&frm);
+            cout << endl << "Suma de colores ROJO + VERDE" << endl;
+            system("pause");
+            break;
+        case 0x39:
+            colorResultado = colorBlanco - colorRojo;
+            frm.SetColorFrame(colorResultado);
+            render.ShowFrame(&frm);
+            cout << endl << "Resta de colores BLANCO - ROJO" << endl;
+            system("pause");
             break;
         default:
             cout << endl << "Opci\xA2n no valida" << endl;
